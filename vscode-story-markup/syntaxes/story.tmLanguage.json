@@ -1,0 +1,297 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "story script",
+	"patterns":[
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#tag"
+		},
+		{
+			"include": "#root_tags"
+		}
+	],
+	"repository": {
+		"object":{
+			"begin": "<\\??([a-z]+)?:[a-z_0-9]+ ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#object"
+			},{
+				"include": "#tag_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"object"
+				},
+				"1":{
+					"name":"constant.langcode"
+				},
+				"2":{
+					"name":"constant.object.id"
+				},
+				"3":{
+					"name":"constant.object.id.alt"
+				},
+				"5":{
+					"name":"string"
+				}
+				
+			}
+		},
+		"tag_body":{
+			"patterns": [{
+				"include": "#comment"
+			},{
+				"include": "#annotation"
+			},{
+				"include": "#object"
+			},
+			{
+				"include": "#object_directive"
+			}]
+		},
+		"tag_story":{
+			"begin": "<\\??([a-z]+)?:story ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#tag_chapter"
+			},
+			{
+				"include": "#tag_location"
+			},{
+				"include": "#tag_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"object.story"
+				},
+				"1":{
+					"name":"constant.langcode"
+				},
+				"2":{
+					"name":"constant.object.id"
+				},
+				"3":{
+					"name":"constant.object.id.alt"
+				},
+				"5":{
+					"name":"string"
+				}
+				
+			}
+		},
+		"tag_chapter":{
+			"begin": "<\\??([a-z]+)?:chapter ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#tag_scene"
+			},{
+				"include": "#tag_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"object.chapter"
+				},
+				"1":{
+					"name":"constant.langcode"
+				},
+				"2":{
+					"name":"constant.object.id"
+				},
+				"3":{
+					"name":"constant.object.id.alt"
+				},
+				"5":{
+					"name":"string"
+				}
+			}
+		},
+		"tag_character":{
+			"begin": "<\\??([a-z]+)?:character ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#tag_scene"
+			},{
+				"include": "#tag_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"object.character"
+				},
+				"1":{
+					"name":"constant.langcode"
+				},
+				"2":{
+					"name":"constant.object.id"
+				},
+				"3":{
+					"name":"constant.object.id.alt"
+				},
+				"5":{
+					"name":"string"
+				}
+			}
+		},
+		"tag_scene":{
+			"begin": "<\\??([a-z]+)?:scene ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#tag_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"object.scene"
+				},
+				"1":{
+					"name":"constant.langcode"
+				},
+				"2":{
+					"name":"constant.object.id"
+				},
+				"3":{
+					"name":"constant.object.id.alt"
+				},
+				"5":{
+					"name":"string"
+				}
+			}
+		},
+		"tag_location":{
+			"begin": "<\\??([a-z]+)?:location ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#tag_location"
+			},{
+				"include": "#tag_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"object.location"
+				},
+				"1":{
+					"name":"constant.langcode"
+				},
+				"2":{
+					"name":"constant.object.id"
+				},
+				"3":{
+					"name":"constant.object.id.alt"
+				},
+				"5":{
+					"name":"string"
+				}
+			}
+		},
+
+
+		"lang_value":{
+			"patterns": [{
+				"include": "#numeric"
+			},{
+				"include": "#boolean"
+			},{
+				"include": "#unsure"
+			},{
+				"include": "#strings"
+			},{
+				"include": "#reference"
+			},{
+				"include": "#macro"
+			}]
+		},
+		"root_tags":{
+			"patterns": [{
+				"include": "#tag_story"
+			},{
+				"include": "#tag_chapter"
+			},{
+				"include": "#tag_character"
+			},{
+				"include": "#tag_location"
+			},{
+				"include": "#object"
+			}]	
+		},
+		"object_directive":{
+			"name":"support.class",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"include": "#tag"
+			},{
+				"include": "#macro"
+			}]
+		},
+		"annotation":{
+			"name":"support.function",
+			"begin": "@[a-z_0-9]+",
+			"end": ":",
+			"patterns": [{
+				"include": "#comment"
+			},{
+				"include": "#tag"
+			},{
+				"include": "#annotation_value"
+			},{
+				"include": "#annotation_body"
+			}]
+		},
+		"annotation_body":{
+			"match":"[\\p{alnum}\\p{punct}]+",
+			"name":"constant.language.boolean"
+		},
+		"annotation_value":{
+			"name":"string",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"include": "#lang_value"
+			}]
+		},
+		"comment":{
+			"name":"comment",
+			"begin": "~",
+			"end":"~"
+		},
+		"tag":{
+			"name":"keyword",
+			"match": "(#!?|!)[a-z_0-9]+"
+		},
+		"macro":{
+			"match": "&[a-z_0-9]+(\\.[a-z]+)*",
+			"name":"storage.modifier.import.java"
+		},
+		"reference":{
+			"match": "&(/[a-z_0-9]+)+#([a-z_0-9]+\\/?)*",
+			"name":"markup.italic"
+		},
+
+		"numeric":{
+			"name":"variable",
+			"match": "[0-9]+(\\.[0-9]+)?"
+		},
+		"boolean":{
+			"name":"storage.modifier.import.java",
+			"match": "(true)|(false)"
+		},
+		"unsure":{
+			"name":"markup.italic",
+			"match": "unsure"
+		},
+		"strings": {
+			"name": "string.quoted.double.story",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.story",
+					"match": "\\\\."
+				}
+			]
+		}
+
+	},
+	"scopeName": "source.story"
+}

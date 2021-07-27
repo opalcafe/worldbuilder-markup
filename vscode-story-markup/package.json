@@ -1,0 +1,33 @@
+{
+    "name": "story-script",
+    "displayName": "Story Script",
+    "description": "Syntax Highlighting for story scripts",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.58.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "themes": [
+            {
+                "label": "Story Theme",
+                "uiTheme": "vs-dark",
+                "path": "./themes/Story Theme-color-theme.json"
+            }
+        ],
+
+        "languages": [{
+            "id": "story",
+            "aliases": ["story script", "story"],
+            "extensions": [".mstory", "storydef"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "story",
+            "scopeName": "source.story",
+            "path": "./syntaxes/story.tmLanguage.json"
+        }]
+    }
+}

@@ -1,0 +1,730 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "story script",
+	"patterns":[
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#tag"
+		},
+		{
+			"include": "#object_tags"
+		}
+	],
+	"repository": {
+		"object":{
+			"begin": "<\\??([a-z]+)?:[a-z_0-9]+ ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#object"
+			},{
+				"include": "#object_body"
+			}],
+			"captures": {
+				"0":{
+					"name":"markup.bold"
+				},
+				"2":{
+					"name":"keyword"
+				},
+				"3":{
+					"name":"support.function"
+				},
+				"5":{
+					"name":"string"
+				},
+				"1":{
+					"name":"storage.modifier.import.java"
+				}
+			}
+		},
+		"chapter":{
+			"begin": "<\\??([a-z]+)?:chapter ([a-z_0-9]+((\\.[a-z]*)*)?|#)\\s*:?([\\p{alnum}\\s\\p{punct}]+)?>(\\s*\\{)",
+			"end": "\\}",
+			"patterns": [{
+				"include": "#object"
+			}],
+			"captures": {
+				"0":{
+					"name":"support.class"
+				},
+				"2":{
+					"name":"keyword"
+				},
+				"3":{
+					"name":"support.function"
+				},
+				"5":{
+					"name":"string"
+				},
+				"1":{
+					"name":"storage.modifier.import.java"
+				}
+			}
+		},
+		"lang_value":{
+			"patterns": [{
+				"include": "#numeric"
+			},{
+				"include": "#boolean"
+			},{
+				"include": "#unsure"
+			},{
+				"include": "#strings"
+			},{
+				"include": "#reference"
+			},{
+				"include": "#macro"
+			}]
+		},
+		"object_tags":{
+			"patterns": [{
+				"include": "#chapter"
+			},{
+				"include": "#object"
+			}]	
+		},
+		"object_body":{
+			"patterns": [{
+				"include": "#tag"
+			},{
+				"include": "#comment"
+			},{
+				"include": "#annotation"
+			}]
+		},
+		"annotation":{
+			"name":"support.function",
+			"begin": "@[a-z_0-9]+",
+			"end": ":",
+			"patterns": [{
+				"include": "#comment"
+			},{
+				"include": "#tag"
+			},{
+				"include": "#annotation_value"
+			},{
+				"include": "#annotation_body"
+			}]
+		},
+		"annotation_body":{
+			"match":"[\\p{alnum}\\p{punct}]+",
+			"name":"constant.language.boolean"
+		},
+		"annotation_value":{
+			"name":"string",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"include": "#lang_value"
+			}]
+		},
+		"comment":{
+			"name":"comment",
+			"begin": "~",
+			"end":"~"
+		},
+		"tag":{
+			"name":"keyword",
+			"match": "(#!?|!)[a-z_0-9]+"
+		},
+		"macro":{
+			"match": "&[a-z_0-9]+(\\.[a-z]+)*",
+			"name":"storage.modifier.import.java"
+		},
+		"reference":{
+			"match": "&(/[a-z_0-9]+)+#([a-z_0-9]+\\/?)*",
+			"name":"markup.italic"
+		},
+
+		"numeric":{
+			"name":"variable",
+			"match": "[0-9]+(\\.[0-9]+)?"
+		},
+		"boolean":{
+			"name":"storage.modifier.import.java",
+			"match": "(true)|(false)"
+		},
+		"unsure":{
+			"name":"markup.italic",
+			"match": "unsure"
+		},
+		"strings": {
+			"name": "string.quoted.double.story",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.story",
+					"match": "\\\\."
+				}
+			]
+		}
+
+	},
+
+
+
+
+
+
+
+
+
+	
+
+	"patterns_v2": [
+		
+		{
+			"include": "#prose_directive"
+		},
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#tag"
+		},
+		{
+			"include": "#lang"
+		},
+		{
+			"include": "#lang_objects"
+		},
+		{
+			"include": "#annotation"
+		}],
+	"repository_v2": {
+
+		"lang":{
+			"patterns": [{
+				"include": "#lang_class"
+			},{
+				"include": "#lang_inherit"
+			},{
+				"match": "\\*\\*",
+				"name":"markup.bold"
+			}]
+		},
+		"lang_value":{
+			"patterns": [{
+				"include": "#numeric"
+			},{
+				"include": "#boolean"
+			},{
+				"include": "#unsure"
+			},{
+				"include": "#strings"
+			},{
+				"include": "#reference"
+			},{
+				"include": "#macro"
+			}]
+		},
+		"lang_type":{
+			"name":"keyword",
+			"match": "[a-z_0-9]+"
+		},
+		"lang_inherit":{
+			"name":"storage.modifier.import.java",
+			"begin": "::takes ",
+			"end": " ",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+
+		"lang_class":{
+			"name":"storage.modifier.import.java",
+			"begin": "::is ",
+			"end": " ",
+			"patterns": [{
+				"include": "#lang_type"
+			}]
+		},
+		"lang_objects":{
+			"patterns": [{
+				"include": "#tag_story"
+			},{
+				"include": "#tag_chapter"
+			},{
+				"include": "#tag_character"
+			},{
+				"include": "#tag_arc"
+			},{
+				"include": "#tag_group"
+			},{
+				"include": "#tag_location"
+			}]
+		},
+		"tag_story":{
+			"name":"markup.bold",
+			"begin": "<\\??([a-z]+)?:story ",
+			"end": " |: ::",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+		"tag_chapter":{
+			"name":"storage.modifier.import.java",
+			"begin": "<\\??([a-z]+)?:chapter ",
+			"end": " |: ::",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+		"tag_character":{
+			"name":"support.class",
+			"begin": "<\\??([a-z]+)?:character ",
+			"end": " |: ::",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+		"tag_location":{
+			"name":"support.class",
+			"begin": "<\\??([a-z]+)?:location ",
+			"end": " |: ::",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+		"tag_arc":{
+			"name":"keyword",
+			"begin": "<\\??([a-z]+)?:arc ",
+			"end": " |: ::",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+		"tag_group":{
+			"name":"keyword",
+			"begin": "<\\??([a-z]+)?:group ",
+			"end": " |: ::",
+			"patterns": [{
+				"include": "#object_definiton"
+			}]
+		},
+		
+		
+		
+		
+
+		"object_definiton":{
+			"name":"keyword",
+			"begin": "([a-z_0-9]+)|#",
+			"applyEndPatternLast": 0,
+			"end":">| ",
+			"patterns": [{
+				"include": "#alternate"
+			},{
+				"include": "#object_title"
+			}]
+		},
+		"annotation":{
+			"name":"support.function",
+			"begin": "@[a-z_0-9]+",
+			"end": ":",
+			"patterns": [{
+				"include": "#comment"
+			},{
+				"include": "#tag"
+			},{
+				"include": "#annotation_value"
+			},{
+				"include": "#std_word"
+			}]
+		},
+		"annotation_value":{
+			"name":"string",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"include": "#lang_value"
+			}]
+		},
+		"prose_directive":{
+			"name":"support.class",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"include": "#tag"
+			}]
+		},
+		
+
+		"object_id":{
+			"name":"keyword",
+			"begin": "#[a-z_0-9]+",
+			"patterns": [{
+				"name":"markup.bold",
+				"match": "\\.[a-z]+"
+			}],
+			"end": "([a-z]+)|:| "
+		},
+		"object_title":{
+			"name":"string",
+			"match": "[a-zA-Z_0-9 .!@#$%^&*()=+]+"
+		},
+		"alternate":{
+			"name":"markup.bold",
+			"match": "\\.[a-z]+"
+		},
+		"comment":{
+			"name":"comment",
+			"begin": "~",
+			"end":"~"
+		},
+		"tag":{
+			"name":"keyword",
+			"match": "(#!?|!)[a-z_0-9]+"
+		},
+		"std_word":{
+			"match":"[a-zA-Z,._0-9!@$%^&*()]+",
+			"name":"constant.language.boolean"
+		},
+		"macro":{
+			"match": "&[a-z_0-9]+(\\.[a-z]+)*",
+			"name":"storage.modifier.import.java"
+		},
+		"reference":{
+			"match": "&(/[a-z_0-9]+)+#([a-z_0-9]+\\/?)*",
+			"name":"markup.italic"
+		},
+
+		"numeric":{
+			"name":"variable",
+			"match": "[0-9]+(\\.[0-9]+)?"
+		},
+		"boolean":{
+			"name":"storage.modifier.import.java",
+			"match": "(true)|(false)"
+		},
+		"unsure":{
+			"name":"markup.italic",
+			"match": "unsure"
+		},
+		"strings": {
+			"name": "string.quoted.double.story",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.story",
+					"match": "\\\\."
+				}
+			]
+		}
+		
+		
+		
+
+	},
+
+	"patterns_v1": [
+		{
+			"include": "#extend"
+		},
+		{
+			"include": "#reference"
+		},
+		{
+			"include": "#paragraph"
+		},
+		{
+			"include": "#arrow"
+		},
+		{
+			"include": "#tags"
+		},
+		{
+			"include": "#html"
+		},
+		{
+			"include": "#prose_directive"
+		},
+		
+		{
+			"include": "#annotation"
+		},
+		{
+			"include": "#scene"
+		},
+		{
+			"include": "#story"
+		},
+		{
+			"include": "#group"
+		},
+		{
+			"include": "#arc"
+		},
+		{
+			"include": "#definition"
+		},
+		{
+			"include": "#note"
+		},
+		{
+			"include": "#character"
+		},
+		{
+			"include": "#chapter"
+		},
+		{
+			"include": "#location"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#object"
+		}
+		
+	],
+	"repository_v1": {
+		"extend":{
+			"name":"storage.modifier.import.java",
+			"begin": "%extend",
+			"end":">",
+			"patterns": [{
+				"include": "#class"
+			},{
+				"include": "#inherit"
+			}]
+		},
+
+		"inherit":{
+			"name":"storage.modifier.import.java",
+			"begin": "takes ",
+			"end": " ",
+			"patterns": [{
+				"include": "#alternate"
+			},{
+				"name":"support.class",
+				"match": "[a-z_0-9]+"
+			}]
+		},
+		"class":{
+			"name":"storage.modifier.import.java",
+			"begin": "is ",
+			"end": " ",
+			"patterns": [
+				{"name":"support.class",
+				"match": "[a-z_0-9]+"}
+			]
+		},
+
+		"language":{
+			"match": "(null)|(unsure)",
+			"name":"markup.italic"
+		},
+
+		"block_title":{
+			"name":"string",
+			"match": "[a-zA-Z_0-9,\\-\\?!]+"
+		},
+		"definition":{
+			"name":"string",
+			"begin": "<:define",
+			"end":">"
+		},
+		"group":{
+			"name":"story.group",
+			"begin": "<\\??([a-z]+)?:group( [a-zA-Z0-9_\\-]+)?",
+			"end": ">",
+			"patterns": [{
+				"include": "#block_title"
+			}]
+		},
+		"story":{
+			"name":"story",
+			"begin": "<\\??([a-z]+)?:story [a-zA-Z0-9_\\-]+:?",
+			"end": ">",
+			"patterns": [{
+				"include": "#block_title"
+				}]
+			
+		},
+		"chapter":{
+			"name":"story.chapter",
+			"begin": "<\\??([a-z]+)?:chapter [a-zA-Z0-9_\\-]+:?",
+			"end":">",
+			"patterns": [{
+				"include": "#block_title"
+			}]
+		},
+		"location":{
+			"name":"story.location",
+			"begin": "<\\??([a-z]+)?:location [a-zA-Z0-9_\\-]+:?",
+			"end":">",
+			
+			"patterns": [{
+				"include": "#block_title"
+			}]
+		},
+		"scene":{
+			"name":"story.chapter.scene",
+			"begin": "<\\??([a-z]+)?:scene [a-zA-Z0-9_\\-]+:?",
+			"end": ">",
+			"patterns": [{
+				"include": "#block_title"
+			}]
+		},
+		"character":{
+			"name":"story.character",
+			"begin": "<\\??([a-z]+)?:character [a-zA-Z0-9_\\-]+:?",
+			"end":">",
+			"patterns": [{
+				"include": "#alternate"
+			},{
+				"include": "#block_title"
+			}]
+		},
+		"arc":{
+			"name":"keyword",
+			"begin": "<\\??([a-z]+)?:arc [a-zA-Z0-9_\\-]+:?",
+			"end":">",
+			"patterns": [{
+				"include": "#reference"
+			},{
+				"include": "#language"
+			},{
+				"include": "#block_title"
+			}]
+		},
+		"object":{
+			"name":"storage.modifier.import.java",
+			"begin": "<\\??([a-z]+)?:[a-z]+ [a-zA-Z0-9_\\-]+:?",
+			"end":">",
+			"patterns": [{
+				"include": "#alternate"
+			},{
+				"include": "#block_title"
+			}]
+		},
+		"note":{
+			"name":"markup.italic",
+			"begin": "<\\??([a-z]+)?:note",
+			"end": ">"
+		},
+		"reference":{
+			"patterns": [{
+				"name":"storage.modifier.import.java",
+				"match": "&[a-z_0-9]+"
+			}]
+		},
+
+		"tags":{
+			"patterns": [{
+				"name":"keyword",
+				"match": "#[a-zA-Z_0-9]+"
+			}]
+		},
+		"comment":{
+			"name":"comment",
+			"begin": "~",
+			"end": "~"
+		},
+		"html":{
+			"name":"variable",
+			"begin": "`",
+			"end": "`",
+			"patterns": [{
+				"include": "#html_tag"
+			},{
+				"include": "#reference"
+			}]
+		},
+		"alternate":{
+			"name":"keyword",
+			"match": "[.][a-z_0-9]+"
+		},
+		"html_tag":{
+			"name":"string",
+			"begin": "<",
+			"end": ">"
+		},
+		"annotation_directive":{
+			"name":"string",
+			"begin": "<",
+			"end": ">",
+			"patterns": [{
+				"include": "#reference"
+			}]
+		},
+		"annotation":{
+			"name":"support.function",
+			"begin": "@[a-zA-Z_0-9]+",
+			"end": ":",
+			"patterns": [{
+				"include": "#tags"
+			},{
+				"include": "#annotation_directive"
+			},{
+				"include": "#comment"
+			},{
+				"name":"constant.language.boolean",
+				"match": "[a-zA-Z]+"
+			}]
+		},
+		"paragraph":{
+			"name":"string",
+			"match": "\\*"
+		},
+		
+
+		"directive":{
+			"begin": ":",
+			"end": ":",
+			"patterns": [{
+				"match": "@popcorn",
+				"name":"support.type"
+			}]
+		},
+		"arrow":{
+			"name":"keyword",
+			"begin": "=>",
+			"end": "\n"
+		},
+
+		"prose_directive":{
+			"name":"support.class",
+			"begin": "/",
+			"end": "/",
+			"patterns": [{
+				"include": "#tags"
+			},{
+				"include": "#reference"
+			}]
+		},
+		"words":{
+			"patterns": [{
+				"name":"keyword",
+				"match": "popcorn"
+			}]
+		},
+
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.story",
+				"match": "\\b(if|while|for|return)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.story",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.story",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.story"
+}
